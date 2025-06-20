@@ -38,3 +38,51 @@ export const returnCommentById = async (req, res) => {
     await client.close();
   }
 }
+
+export const createNewComment = async (req, res) => {
+  const client = await MongoClient.connect(DB_CONNECTION_STRING);
+  try{
+    const newComment = 
+    {
+      ...req.body,
+      password: bcrypt.hashSync(req.body.passwordText, 10)
+    }
+    const DB_Response = await client.db(process.env.DB_NAME).collection('comments').insertOne(newComment);
+  
+    if(DB_Response.acknowledged){
+      res.status(201).send({
+        ...newComment,
+        _id: DB_Response.insertedId
+      });
+    } else {
+      res.status(500).send({ error: 'error accured while trying to connect to DB' });
+    }
+  } catch(err) {
+    console.log(err);
+    res.status(500).send({ error: 'error accured while trying to connect to DB' });
+  } finally {
+    await client.close();
+  }
+}
+
+export const deleteCommentById = async (req, res) => {
+  const client = await MongoClient.connect(DB_CONNECTION_STRING);
+  try{    
+    let filter = 
+    { 
+      _id: req.params.id
+    };
+    const DB_Response = await client.db(process.env.DB_NAME).collection('comments').deleteOne(filter);
+    console.log(DB_Response);
+    if(DB_Response.deletedCount){
+      res.send({ success: `Comment with ID ${req.params.id} was deleted successfully.` });
+    } else {
+      res.status(404).send({ error: `Failed to delete. No comment with ID ${req.params.id}.` });
+    }
+  } catch(err) {
+    console.log(err);
+    res.status(500).send({ error: 'error accured while trying to connect to DB' });
+  } finally {
+    await client.close();
+  }
+}
