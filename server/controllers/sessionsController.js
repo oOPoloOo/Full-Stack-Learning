@@ -40,12 +40,11 @@ export const returnSessionById = async (req, res) => {
 }
 
 export const createNewSession = async (req, res) => {
-  const client = await MongoClient.connect(DB_CONNECTION_STRING);
+  const client = await connectDB();
   try{
     const newSession = 
     {
-      ...req.body,
-      password: bcrypt.hashSync(req.body.passwordText, 10)
+      ...req.body     
     }
     const DB_Response = await client.db(process.env.DB_NAME).collection('sessions').insertOne(newSession);
   
@@ -66,7 +65,7 @@ export const createNewSession = async (req, res) => {
 }
 
 export const deleteSessionById = async (req, res) => {
-  const client = await MongoClient.connect(DB_CONNECTION_STRING);
+  const client = await connectDB();
   try{    
     let filter = 
     { 

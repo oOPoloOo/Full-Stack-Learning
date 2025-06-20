@@ -40,12 +40,14 @@ export const returnUserById = async (req, res) => {
 }
 
 export const createNewUser = async (req, res) => {
-  const client = await MongoClient.connect(DB_CONNECTION_STRING);
+ const client = await connectDB();
   try{
     const newUser = 
     {
       ...req.body,
-      password: bcrypt.hashSync(req.body.passwordText, 10)
+      // TODO: Add Bcrypt password hashing
+      // password: bcrypt.hashSync(req.body.passwordText, 10)
+      password: req.body.passwordText
     }
     const DB_Response = await client.db(process.env.DB_NAME).collection('users').insertOne(newUser);
   
@@ -66,7 +68,7 @@ export const createNewUser = async (req, res) => {
 }
 
 export const deleteUserById = async (req, res) => {
-  const client = await MongoClient.connect(DB_CONNECTION_STRING);
+ const client = await connectDB();
   try{    
     let filter = 
     { 

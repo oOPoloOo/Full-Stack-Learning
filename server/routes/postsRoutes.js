@@ -10,4 +10,10 @@ router.get('', PostsController.returnAllPosts);
 // return specific posts by id
 router.get('/:id', PostsController.returnPostById);
 
+// create new posts
+router.post('/', PostsController.createNewPost);
+
+// delete posts by id
+router.delete('/:id', PostsController.deletePostById);
+
 export default router;

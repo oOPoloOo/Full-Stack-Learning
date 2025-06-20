@@ -11,4 +11,11 @@ router.get('', CommentsController.returnAllComments);
 // return specific comment by id
 router.get('/:id', CommentsController.returnCommentById);
 
+// create new comment
+router.post('/', CommentsController.createNewComment);
+
+// delete comment by id
+router.delete('/:id', CommentsController.deleteCommentById);
+
+
 export default router;

@@ -40,12 +40,11 @@ export const returnPostById = async (req, res) => {
 }
 
 export const createNewPost = async (req, res) => {
-  const client = await MongoClient.connect(DB_CONNECTION_STRING);
+ const client = await connectDB();
   try{
     const newPost = 
     {
-      ...req.body,
-      password: bcrypt.hashSync(req.body.passwordText, 10)
+      ...req.body     
     }
     const DB_Response = await client.db(process.env.DB_NAME).collection('posts').insertOne(newPost);
   
@@ -66,7 +65,7 @@ export const createNewPost = async (req, res) => {
 }
 
 export const deletePostById = async (req, res) => {
-  const client = await MongoClient.connect(DB_CONNECTION_STRING);
+  const client = await connectDB();
   try{    
     let filter = 
     { 
