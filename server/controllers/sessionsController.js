@@ -1,7 +1,7 @@
 import { connectDB } from "./helper.js";
 
 
-  export const returnAllSesions= async (req, res) => {
+  export const returnAllSessions = async (req, res) => {
   const client = await connectDB();
   try 
   {    
