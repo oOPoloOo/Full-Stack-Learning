@@ -1,4 +1,4 @@
-import { connectDB } from "./helper.js";
+import { connectDB } from "./dbController.js";
 
 
   export const returnAllPosts = async (req, res) => {

@@ -1,4 +1,5 @@
-import { connectDB } from "./helper.js";
+import { connectDB } from "./dbController.js";
+import { v4 as generateID } from 'uuid';
 
 
   export const returnAllUsers = async (req, res) => {
@@ -41,21 +42,31 @@ export const returnUserById = async (req, res) => {
 
 export const createNewUser = async (req, res) => {
  const client = await connectDB();
-  try{
+  try
+  {
     const newUser = 
-    {
-      ...req.body,
+    { 
+      _id: generateID(), // uuidv4() - generates random id
+      name: req.body.name,
+      email: req.body.email,
       // TODO: Add Bcrypt password hashing
       // password: bcrypt.hashSync(req.body.passwordText, 10)
-      password: req.body.passwordText
+      password: req.body.password,
+      role: 'user'
     }
+     
     const DB_Response = await client.db(process.env.DB_NAME).collection('users').insertOne(newUser);
   
     if(DB_Response.acknowledged){
-      res.status(201).send({
-        ...newUser,
-        _id: DB_Response.insertedId
-      });
+      const nUser  = 
+      {
+        ...newUser,        
+        _id: DB_Response.insertedId     
+      }                  
+   
+      res.writeContinue();
+      return nUser;     
+     
     } else {
       res.status(500).send({ error: 'error accured while trying to connect to DB' });
     }
