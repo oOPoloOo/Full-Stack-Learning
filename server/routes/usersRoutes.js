@@ -1,12 +1,14 @@
 import { Router } from 'express';
 
 import * as UsersController from '../controllers/usersController.js';
+// TODO: add authentication when middleware finished 
+import { checkJWT } from '../middleware/webToken.js';
 
 
 const router = Router();
 
 // returns all users
-router.get('', UsersController.returnAllUsers);
+router.get('', checkJWT, UsersController.returnAllUsers);
 
 // return specific user by id
 router.get('/:id', UsersController.returnUserById);
