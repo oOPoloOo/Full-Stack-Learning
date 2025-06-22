@@ -54,7 +54,6 @@ export const verifyAdmin = (req, res, next) => {
   if(req.headers.role === 'admin'){
     next();
   } else {
-    res.status(401).send({ error: 'You do not have permission to access this information.' });
-    // res.sendStatus(401);
+    res.status(401).send({ error: 'You do not have permission to access this information.' });    
   }
 }

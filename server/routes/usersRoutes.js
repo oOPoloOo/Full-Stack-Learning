@@ -2,21 +2,19 @@ import { Router } from 'express';
 
 import * as UsersController from '../controllers/usersController.js';
 import {  login, register, loginAuto } from '../controllers/authController.js';
-// TODO: add authentication when middleware finished 
-// TODO: allow acces only to admin
-import { checkJWT, verifyAdmin } from '../middleware/webToken.js';
+import { checkJWT,verifyAdmin } from '../middleware/webToken.js';
 
 
 const router = Router();
 
 // returns all users
-router.get('', UsersController.returnAllUsers);
+router.get('', checkJWT, verifyAdmin, UsersController.returnAllUsers);
 
 // return specific user by id
-router.get('/:id', UsersController.returnUserById);
+router.get('/:id', checkJWT, verifyAdmin, UsersController.returnUserById);
 
 // delete user by id
-router.delete('/:id', UsersController.deleteUserById);
+router.delete('/:id', checkJWT, verifyAdmin, UsersController.deleteUserById);
 
 // logIn user if exists in database
 router.post('/login', login);

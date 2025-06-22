@@ -35,3 +35,41 @@ export const findUser = async (uEmail, uPassword) => {
  
   return user;
 }
+
+
+export const isPostCreator  = async (req, res, next) => {
+  const client = await connectDB();
+  
+  let filter = 
+  { 
+    _id: req.params.id
+  };
+    
+  const userEmail =  req.body.email; 
+  const post = await client.db(process.env.DB_NAME).collection('posts').findOne(filter);
+  
+  if(post.email !== userEmail) //TODO Check
+  {
+    return res.status(401).send({ error: 'You do not have permission to do this action.' });      
+  }  
+  next();
+}
+
+export const isCommentsCreator  = async (req, res, next) => {
+  const client = await connectDB(); 
+
+  let filter = 
+  { 
+    _id: req.params.id
+  };
+    
+  const userEmail =  req.body.email; 
+  const comment = await client.db(process.env.DB_NAME).collection('comments').findOne(filter);
+  
+  if(comment.email !== userEmail) //TODO Check
+  {
+    return res.status(401).send({ error: 'You do not have permission to do this action.' });      
+  }  
+  next();
+}
+ 
