@@ -1,5 +1,6 @@
-import 'dotenv/config';
+import cookieParser from "cookie-parser";
 import express from 'express';
+import 'dotenv/config';
 import cors from 'cors';
 
 import usersRoutes from './routes/usersRoutes.js';
@@ -9,10 +10,17 @@ import sessionsRoutes from './routes/sessionsRoutes.js';
 
 const PORT = process.env.PORT || 5501;
 
+const corsOptions = {
+  origin: `http://localhost:5500`,
+  exposedHeaders: ['Authorization'],
+  credentials: true
+}
+
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
+app.use(cookieParser());
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
