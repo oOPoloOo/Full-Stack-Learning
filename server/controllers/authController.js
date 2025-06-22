@@ -28,32 +28,31 @@ export const login = async (req, res) => {
   }
 }
 
-export const register = async (req, res) => {
+export const register = async (req, res) => 
+{
     
-    const user = await checkUser( req.body.email, req.body.password );
-    if(user)
-    {
-        return res.status(405).send({ error: "User with such email already exists." });
-    }
-    const newUser = await createNewUser(req, res); 
+  const user = await checkUser( req.body.email, req.body.password );
+  if(user)
+  {
+    return res.status(405).send({ error: "User with such email already exists." });
+  }
+  const newUser = await createNewUser(req, res); 
 
-    // sukuriame jsonWebToken
-    const accessToken = createAccessJWT(newUser);
-    console.log('REGISTER 4 --------'); 
-    const refreshToken = createRefreshJWT(newUser);
-    console.log('REGISTER 5 --------'); 
-    res
-        .cookie('refreshToken', refreshToken, {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: false
-        })
-        .header('Authorization', accessToken)
-        .send({
-        success: "Your user was created"
-        });
+  // sukuriame jsonWebToken
+  const accessToken = createAccessJWT(newUser);  
+  const refreshToken = createRefreshJWT(newUser);
+  
+  res
+    .cookie('refreshToken', refreshToken, {
+    httpOnly: true,
+    sameSite: 'lax',
+    secure: false
+    })
+    .header('Authorization', accessToken)
+    .send({
+    success: "Your user was created"
+    });
 }
-
 
 export const loginAuto = async (req, res) => {
   const accessToken = req.headers.authorization.split(' ')[1];

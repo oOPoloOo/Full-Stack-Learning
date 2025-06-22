@@ -1,5 +1,6 @@
 import { Router } from 'express';
-
+import { isCommentsCreator } from '../controllers/dbController.js';
+import { checkJWT } from '../middleware/webToken.js';
 import * as CommentsController from '../controllers/commentsController.js';
 
 
@@ -12,10 +13,13 @@ router.get('', CommentsController.returnAllComments);
 router.get('/:id', CommentsController.returnCommentById);
 
 // create new comment
-router.post('/', CommentsController.createNewComment);
+router.post('/',checkJWT, isPostCreator, CommentsController.createNewComment);
 
 // delete comment by id
-router.delete('/:id', CommentsController.deleteCommentById);
+router.delete('/:id', checkJWT, isCommentsCreator, CommentsController.deleteCommentById);
 
+// TODO: Finish
+// edit comment 
+// router.patch('/:id',checkJWT, isCommentsCreator, CommentsController.updateCommentById);
 
 export default router;
