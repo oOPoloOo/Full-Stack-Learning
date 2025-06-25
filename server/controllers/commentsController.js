@@ -47,7 +47,6 @@ export const returnCommentByPostId = async (req, res) => {
     {       
       post_id: req.params.id
     };
-     console.log("SERVER:  post id ", req.params.id);
     const data = await client.db(process.env.DB_NAME).collection('comments').find(filter).toArray();
     
     if(Object.is(data, null)){

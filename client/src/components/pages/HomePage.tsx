@@ -3,7 +3,10 @@ import styled from "styled-components";
 import { FaBars } from "react-icons/fa";
 import Card from "../UI/molecules/PostCard";
 import PostContext from "../../contexts/PostsContext";
-import type { PostContextType } from "../../types";
+import type { PostContextType, UserContextTypes } from "../../types";
+import AddPostButton from "../UI/molecules/AddPostButton";
+import { useNavigate } from "react-router";
+import UserContext from "../../contexts/UsersContext";
 
 const SIDEBAR_WIDTH = 240;
 const SIDEBAR_COLLAPSED_WIDTH = 48;
@@ -36,6 +39,11 @@ const Content = styled.div<CollapsibleProps>`
   padding: 20px;
   transition: margin-left 0.3s ease;
   position: relative;
+
+  h1
+  {
+    margin-top: 10px;
+  }
 `;
 
 const HamburgerButton = styled.button`
@@ -66,7 +74,10 @@ const StyledPostsContainer = styled.div`
 const HomePage = () => {
   const [collapsed, setCollapsed] = useState(false);
   const { posts } = useContext(PostContext) as PostContextType;
+  const { loggedInUser } = useContext(UserContext) as UserContextTypes;
 
+  const navigate = useNavigate();
+ 
   return (
     <Container>
       <Sidebar collapsed={collapsed}>
@@ -85,22 +96,29 @@ const HomePage = () => {
         <HamburgerButton onClick={() => setCollapsed(!collapsed)}>
           <FaBars />
         </HamburgerButton>
+       
+         {loggedInUser && (
+          <AddPostButton
+            label="Add ME POST!"
+            onClick={() => navigate('/newPost')}
+          />
+        )}
+   
+        <h1>Everything about Games and more!</h1>
 
-      <h1>Everything about Games and more!</h1>
-
-     <StyledPostsContainer>
-        {
-          posts.length ? 
-          posts.map(item => 
-            <Card
-              key={item._id}
-              data={item}
-            />
-          ) :
-          <p>Loading...</p>
-        }
-        
-      </StyledPostsContainer>
+        <StyledPostsContainer>
+          {
+            posts.length ? 
+            posts.map(item => 
+              <Card
+                key={item._id}
+                data={item}
+              />
+            ) :
+            <p>Loading...</p>
+          }
+          
+        </StyledPostsContainer>
 
       </Content>
     </Container>

@@ -1,6 +1,6 @@
 
 export type User = {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   password: string;
@@ -41,7 +41,7 @@ export type Post = {
 
 export type PostContextType = {
   posts: Post[],
-  // addPost: (newPost: Omit<Post, "_id">) => Promise<{ error: string } | { success: string }>
+ addpost: (newPost: Omit<Post, "_id">) => Promise<{ error: string } | { success: string }>
 };
 
 export type PostContextReducerActions = 

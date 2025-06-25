@@ -62,7 +62,7 @@ const HeaderS = styled.header`
 const Header = () => {
     const { loggedInUser, logout } = useContext(UserContext) as UserContextTypes;
     const navigate = useNavigate();
-    console.dir('Header: loggedInUser ', loggedInUser);
+    
     return (
         <HeaderS>
         <div>

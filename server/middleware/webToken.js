@@ -46,13 +46,13 @@ export const checkJWT = async (req, res, next) => {
 
 export const createAccessJWT = (newUser) => {
   return jwt.sign(newUser, process.env.ACCESS_JWT, {
-    expiresIn: '15m'
+    expiresIn: '60m'
   });
 }
 
 export const createRefreshJWT = (newUser) => {
   return jwt.sign(newUser, process.env.REFRESH_JWT, {
-    expiresIn: '3m'
+    expiresIn: '30m'
   });
 }
 

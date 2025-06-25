@@ -34,14 +34,12 @@ export const register = async (req, res) =>
 {
     
   const userExists= await checkUser( req.body.email, req.body.password );
-  console.dir("SERVER: REGISTER: EXISTING USER ",userExists);
   if(userExists)
   {
     return res.status(405).send({ error: "User with such email already exists." });
   }
 
   const newUser = await createNewUser(req, res); 
-  console.dir("SERVER: REGISTER: created user",newUser);
 
   const { password, ...userInfoNoPass } = newUser;
 

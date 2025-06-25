@@ -31,6 +31,40 @@ const PostProvider = ({ children }: ChildrenElementProp) => {
       })
   }
 
+  type BackAddPostResponse = 
+  { error: Error, message: string } |
+  { acknowledged: boolean, insertedId: string }
+  const addpost = async (newPost: Omit<Post, '_id'>): Promise<{ error: string } | { success: string }> => {
+    const accessJWT = localStorage.getItem('accessJWT') || sessionStorage.getItem('accessJWT');
+    try {
+      // vietoj http://localhost:5500 - galima būtų naudoti proxy (reik set-up'intis)
+      const BACK_RESPONSE: BackAddPostResponse = await fetch(`http://localhost:5500/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type":"application/json",
+          Authorization: `Bearer ${accessJWT}`
+        },
+        body: JSON.stringify(newPost)
+      }).then(res => res.json())
+      if("error" in BACK_RESPONSE){
+        console.error(BACK_RESPONSE.error);
+        return { error: BACK_RESPONSE.message };
+      } else {
+        dispatch({
+          type: 'addPost',
+          newPost: {
+            ...newPost,
+            _id: BACK_RESPONSE.insertedId
+          }
+        });
+        return { success: 'Successfully added new post.' };
+      }
+    } catch(err) {
+      console.error(err);
+      return { error: `Error has accured` };
+    }
+  }
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -38,8 +72,8 @@ const PostProvider = ({ children }: ChildrenElementProp) => {
   return (
     <PostContext.Provider 
       value={{
-        posts
-        // addMerch
+        posts,
+        addpost
       }}
     >
       { children }

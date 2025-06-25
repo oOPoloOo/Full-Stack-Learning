@@ -40,6 +40,7 @@ export const returnPostById = async (req, res) => {
 }
 
 export const createNewPost = async (req, res) => {
+  console.log("SERVER - createNewPost");
  const client = await connectDB();
   try{
     const newPost = 
