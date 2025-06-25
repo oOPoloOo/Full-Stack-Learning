@@ -14,22 +14,50 @@ import { connectDB } from "./dbController.js";
   }
 }
 
-export const returnCommentById = async (req, res) => {
+// export const returnCommentById = async (req, res) => {
+//   const client = await connectDB();
+//   try 
+//   {
+//     let filter = 
+//     {     
+//       _id: req.params.id
+//     };
+
+//     const data = await client.db(process.env.DB_NAME).collection('comments').findOne(filter);
+  
+//     if(Object.is(data, null)){
+//       res.status(404).send({ error: `No comment was found using ID ${req.params.id}.` });
+//       return;
+//     }
+//     res.send(data);
+    
+//   } catch(err){
+//     console.log(err);
+//     res.status(500).send({ error: 'error accured while trying to connect to DB' });
+//   } finally {
+//     await client.close();
+//   }
+// }
+
+export const returnCommentByPostId = async (req, res) => {
   const client = await connectDB();
   try 
   {
     let filter = 
-    {     
-      _id: req.params.id
+    {       
+      post_id: req.params.id
     };
-
-    const data = await client.db(process.env.DB_NAME).collection('comments').findOne(filter);
-  
+     console.log("SERVER:  post id ", req.params.id);
+    const data = await client.db(process.env.DB_NAME).collection('comments').find(filter).toArray();
+    
     if(Object.is(data, null)){
       res.status(404).send({ error: `No comment was found using ID ${req.params.id}.` });
       return;
     }
-    res.send(data);
+    res.send({     
+      acknowledged: true,
+      comments: data
+    });
     
   } catch(err){
     console.log(err);
@@ -38,6 +66,7 @@ export const returnCommentById = async (req, res) => {
     await client.close();
   }
 }
+
 
 export const createNewComment = async (req, res) => {
   const client = await connectDB();

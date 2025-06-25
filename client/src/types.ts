@@ -40,7 +40,7 @@ export type Post = {
 };
 
 export type PostContextType = {
-  posts: Post[]
+  posts: Post[],
   // addPost: (newPost: Omit<Post, "_id">) => Promise<{ error: string } | { success: string }>
 };
 
@@ -49,4 +49,24 @@ export type PostContextReducerActions =
 { type: 'addPost', newPost: Post } |
 { type: 'removePost', _id: Post['_id'] };
 
+export type Comment = {
+  _id: string,
+  user_id: string,
+  name: string,
+  email: string,
+  text: string,
+  date: string
+};
+
+export type CommentContextType = {
+  comments: Comment[],
+  fetchPostComments: (postID: string) => Promise<{ error: string } | { success: string }>;
+
+  // addComment: (newComment: Omit<Comment, "_id">) => Promise<{ error: string } | { success: string }>
+};
+
+export type CommentContextReducerActions = 
+{ type: 'setComment', data: Comment[] } |
+{ type: 'addComment', newComment: Comment } |
+{ type: 'removeComment', _id: Comment['_id'] };
 

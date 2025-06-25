@@ -9,8 +9,8 @@ const router = Router();
 // returns all comments
 router.get('', CommentsController.returnAllComments);
 
-// return specific comment by id
-router.get('/:id', CommentsController.returnCommentById);
+// return specific comments by id
+router.get('/:id', CommentsController.returnCommentByPostId);
 
 // create new comment
 router.post('/',checkJWT, isCommentsCreator, CommentsController.createNewComment);

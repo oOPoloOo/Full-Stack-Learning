@@ -1,9 +1,8 @@
 import styled from "styled-components";
-
-import type { Post } from "../../../types";
+import type { Comment } from "../../../types";
 
 type Props = {
-  data: Post
+  data: Comment
 }
 
 const StyledCard = styled.div`
@@ -16,14 +15,13 @@ const StyledCard = styled.div`
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
 `;
 
-
-const Card = ({ data }: Props) => {
+const CommentCard = ({ data }: Props) => {
   return (
     <StyledCard>
-      <h3>{data.name}</h3>
-      <p>${data.text}</p>   
+    <h3>{data.name}</h3>
+    <p>${data.text}</p>   
     </StyledCard>
   );
 }
  
-export default Card;
+export default CommentCard;

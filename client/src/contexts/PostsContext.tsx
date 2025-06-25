@@ -31,40 +31,6 @@ const PostProvider = ({ children }: ChildrenElementProp) => {
       })
   }
 
-//   type BackAddMerchResponse = 
-//   { error: Error, message: string } |
-//   { acknowledged: boolean, insertedId: string }
-//   const addMerch = async (newPost: Omit<Post, '_id'>): Promise<{ error: string } | { success: string }> => {
-//     const accessJWT = localStorage.getItem('accessJWT') || sessionStorage.getItem('accessJWT');
-//     try {
-//       // vietoj http://localhost:5500 - galima būtų naudoti proxy (reik set-up'intis)
-//       const BACK_RESPONSE: BackAddMerchResponse = await fetch(`http://localhost:5500/posts`, {
-//         method: "POST",
-//         headers: {
-//           "Content-Type":"application/json",
-//           Authorization: `Bearer ${accessJWT}`
-//         },
-//         body: JSON.stringify(newPost)
-//       }).then(res => res.json())
-//       if("error" in BACK_RESPONSE){
-//         console.error(BACK_RESPONSE.error);
-//         return { error: BACK_RESPONSE.message };
-//       } else {
-//         dispatch({
-//           type: 'addPost',
-//           newPost: {
-//             ...newPost,
-//             _id: BACK_RESPONSE.insertedId
-//           }
-//         });
-//         return { success: 'Successfully added new merchandise.' };
-//       }
-//     } catch(err) {
-//       console.error(err);
-//       return { error: `Some kinda of error has accured` };
-//     }
-//   }
-
   useEffect(() => {
     fetchData();
   }, []);
