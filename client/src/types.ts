@@ -7,10 +7,6 @@ export type User = {
   passwordText: string;
   role: 'user' | 'admin';
 };
-// export type UsersReducerActionTypes = 
-// { type: 'setUsers', data: User[]} |
-// { type: 'addUser', newUser: User } |
-// { type: 'deleteUser', id: User['id'] }
 
 export type UserContextReducerActions = 
 { type: 'setUser', user: Omit<User, 'password'> } |
@@ -31,4 +27,26 @@ export type ChildrenProp = {
   children: React.ReactElement
 };
 
-// export type BackLoginResponse = { error: string } | { success: string, userData: Omit<User, 'password'> };
+export type ChildrenElementProp = { children: React.ReactElement };
+export type ChildrenNodeProp = { children: React.ReactNode };
+
+export type Post = {
+  _id: string,
+  user_id: string,
+  name: string,
+  email: string,
+  text: string,
+  date: string
+};
+
+export type PostContextType = {
+  posts: Post[]
+  // addPost: (newPost: Omit<Post, "_id">) => Promise<{ error: string } | { success: string }>
+};
+
+export type PostContextReducerActions = 
+{ type: 'setPost', data: Post[] } |
+{ type: 'addPost', newPost: Post } |
+{ type: 'removePost', _id: Post['_id'] };
+
+

@@ -1,6 +1,9 @@
-import React, { useState } from "react";
+import { useContext, useState } from "react";
 import styled from "styled-components";
 import { FaBars } from "react-icons/fa";
+import Card from "../UI/molecules/Card";
+import PostContext from "../../contexts/PostsContext";
+import type { PostContextType } from "../../types";
 
 const SIDEBAR_WIDTH = 240;
 const SIDEBAR_COLLAPSED_WIDTH = 48;
@@ -44,6 +47,7 @@ const HamburgerButton = styled.button`
   border: none;
   border-radius: 50%;
   padding: 10px;
+  margin-left: 25px;
   cursor: pointer;
   color: white;
   z-index: 10;
@@ -52,16 +56,16 @@ const HamburgerButton = styled.button`
   }
 `;
 
-const Card = styled.div`
-  background: #1a252f;
-  padding: 15px;
-  margin-top: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+const StyledPostsContainer = styled.div`
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  flex-wrap: wrap;
 `;
 
 const HomePage = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const { posts } = useContext(PostContext) as PostContextType;
 
   return (
     <Container>
@@ -82,17 +86,22 @@ const HomePage = () => {
           <FaBars />
         </HamburgerButton>
 
-        <h1>Home Page</h1>
+      <h1>Everything about Games and more!</h1>
 
-        <Card>
-          <h3>r/Backend</h3>
-          <p>Does backend involve more programming languages than frontend?</p>
-        </Card>
+     <StyledPostsContainer>
+        {
+          posts.length ? 
+          posts.map(item => 
+            <Card
+              key={item._id}
+              data={item}
+            />
+          ) :
+          <p>Loading...</p>
+        }
+        
+      </StyledPostsContainer>
 
-        <Card>
-          <h3>r/EDM</h3>
-          <p>I found this on Instagram and snapped all the different genres...</p>
-        </Card>
       </Content>
     </Container>
   );
