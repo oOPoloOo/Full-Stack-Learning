@@ -11,7 +11,7 @@ import sessionsRoutes from './routes/sessionsRoutes.js';
 const PORT = process.env.PORT || 5501;
 
 const corsOptions = {
-  origin: `http://localhost:5500`,
+  origin: `http://localhost:5173`,
   exposedHeaders: ['Authorization'],
   credentials: true
 }

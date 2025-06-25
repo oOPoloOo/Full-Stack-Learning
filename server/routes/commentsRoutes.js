@@ -13,7 +13,7 @@ router.get('', CommentsController.returnAllComments);
 router.get('/:id', CommentsController.returnCommentById);
 
 // create new comment
-router.post('/',checkJWT, isPostCreator, CommentsController.createNewComment);
+router.post('/',checkJWT, isCommentsCreator, CommentsController.createNewComment);
 
 // delete comment by id
 router.delete('/:id', checkJWT, isCommentsCreator, CommentsController.deleteCommentById);

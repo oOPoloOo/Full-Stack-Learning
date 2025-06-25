@@ -3,6 +3,7 @@ import { createNewUser } from './usersController.js';
 import { createAccessJWT, createRefreshJWT} from '../middleware/webToken.js';
 
 export const login = async (req, res) => {
+
    try 
    {    
     const user = await findUser( req.body.email, req.body.password);  
@@ -11,9 +12,10 @@ export const login = async (req, res) => {
       return res.status(400).send({ error: `No user found with user email and/or password.` });
     }
 
+    const { password, ...userInfoNoPass } = user;
     // sukuriame jsonWebToken    
-    const accessToken = createAccessJWT(user);
-    const refreshToken = createRefreshJWT(user);
+    const accessToken = createAccessJWT(userInfoNoPass);
+    const refreshToken = createRefreshJWT(userInfoNoPass);
     res
       .cookie('refreshToken', refreshToken, {
         httpOnly: true,
@@ -21,7 +23,7 @@ export const login = async (req, res) => {
         secure: false
       })
       .header('Authorization', accessToken)
-    res.send({ success: "Sucessfully logged in" });
+    res.send({ success: "Sucessfully logged in",  userData: userInfoNoPass});
   } catch(err) {
     console.log(err);
     res.status(500).send({ error: `Something wrong with server, please try to log in later.` })
@@ -31,16 +33,21 @@ export const login = async (req, res) => {
 export const register = async (req, res) => 
 {
     
-  const user = await checkUser( req.body.email, req.body.password );
-  if(user)
+  const userExists= await checkUser( req.body.email, req.body.password );
+  console.dir("SERVER: REGISTER: EXISTING USER ",userExists);
+  if(userExists)
   {
     return res.status(405).send({ error: "User with such email already exists." });
   }
+
   const newUser = await createNewUser(req, res); 
+  console.dir("SERVER: REGISTER: created user",newUser);
+
+  const { password, ...userInfoNoPass } = newUser;
 
   // sukuriame jsonWebToken
-  const accessToken = createAccessJWT(newUser);  
-  const refreshToken = createRefreshJWT(newUser);
+  const accessToken = createAccessJWT(userInfoNoPass);  
+  const refreshToken = createRefreshJWT(userInfoNoPass);
   
   res
     .cookie('refreshToken', refreshToken, {
@@ -50,7 +57,8 @@ export const register = async (req, res) =>
     })
     .header('Authorization', accessToken)
     .send({
-    success: "Your user was created"
+    success: "Your user was created",
+    userData: userInfoNoPass
     });
 }
 
