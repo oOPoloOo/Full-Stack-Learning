@@ -41,7 +41,8 @@ export type Post = {
 
 export type PostContextType = {
   posts: Post[],
- addpost: (newPost: Omit<Post, "_id">) => Promise<{ error: string } | { success: string }>
+ addpost: (newPost: Omit<Post, "_id">) => Promise<{ error: string } | { success: string }>,
+ deletepost: (postId: string, userEmail: string) => Promise<{ error: string } | { success: string }>;
 };
 
 export type PostContextReducerActions = 

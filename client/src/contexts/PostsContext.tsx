@@ -37,7 +37,6 @@ const PostProvider = ({ children }: ChildrenElementProp) => {
   const addpost = async (newPost: Omit<Post, '_id'>): Promise<{ error: string } | { success: string }> => {
     const accessJWT = localStorage.getItem('accessJWT') || sessionStorage.getItem('accessJWT');
     try {
-      // vietoj http://localhost:5500 - galima būtų naudoti proxy (reik set-up'intis)
       const BACK_RESPONSE: BackAddPostResponse = await fetch(`http://localhost:5500/posts`, {
         method: "POST",
         headers: {
@@ -65,6 +64,37 @@ const PostProvider = ({ children }: ChildrenElementProp) => {
     }
   }
 
+  const deletepost = async (postId: string, userEmail: String): Promise<{ error: string } | { success: string }> => {
+  const accessJWT = localStorage.getItem('accessJWT') || sessionStorage.getItem('accessJWT');
+  try {
+    const response = await fetch(`http://localhost:5500/posts/${postId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessJWT}`,
+      },
+      body: JSON.stringify({ email: userEmail }),
+    });
+    console.log("CLIENTR deletepost userEmail ", userEmail);
+    const result = await response.json();
+
+    if (!response.ok || result.error) {
+      return { error: result.message || 'Failed to delete post.' };
+    }
+
+    
+    dispatch({
+      type: 'removePost',
+      _id: postId,
+    });
+
+    return { success: 'Post deleted successfully.' };
+  } catch (err) {
+    console.error(err);
+    return { error: 'An error occurred while deleting the post.' };
+  }
+};
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -73,7 +103,8 @@ const PostProvider = ({ children }: ChildrenElementProp) => {
     <PostContext.Provider 
       value={{
         posts,
-        addpost
+        addpost,
+        deletepost
       }}
     >
       { children }

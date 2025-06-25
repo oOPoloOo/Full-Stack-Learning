@@ -44,11 +44,10 @@ export const isPostCreator  = async (req, res, next) => {
   { 
     _id: req.params.id
   };
-    
+  
   const userEmail =  req.body.email; 
   const post = await client.db(process.env.DB_NAME).collection('posts').findOne(filter);
-  
-  if(post.email !== userEmail) //TODO Check
+  if(post.email !== userEmail) 
   {
     return res.status(401).send({ error: 'You do not have permission to do this action.' });      
   }  
