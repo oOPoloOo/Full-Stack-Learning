@@ -5,7 +5,7 @@ import MainOutlet from './components/outlets/MainOutlet'
 import RegisterPage from './components/pages/RegisterPage'
 import LoginPage from './components/pages/LoginPage'
 import HomePage from './components/pages/HomePage'
-import PostDetailsPage from './components/pages/PostDetailailsPage'
+import PostDetailsPage from './components/pages/PostDetailsPage'
 
 
 function App() {
