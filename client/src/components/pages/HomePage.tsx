@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import styled from "styled-components";
 import { FaBars } from "react-icons/fa";
-import Card from "../UI/molecules/Card";
+import Card from "../UI/molecules/PostCard";
 import PostContext from "../../contexts/PostsContext";
 import type { PostContextType } from "../../types";
 
