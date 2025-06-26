@@ -46,26 +46,20 @@ export const createNewUser = async (req, res) => {
   {
     const newUser = 
     { 
-      _id: generateID(), // uuidv4() - generates random id
+      _id: generateID(), 
       name: req.body.name,
       email: req.body.email,
       // TODO: Add Bcrypt password hashing
-      // password: bcrypt.hashSync(req.body.passwordText, 10)
-      password: req.body.password,
+      // password: bcrypt.hashSync(req.body.passwordText, 10)      
       role: 'user'
     }
-     
+
     const DB_Response = await client.db(process.env.DB_NAME).collection('users').insertOne(newUser);
   
-    if(DB_Response.acknowledged){
-      const nUser  = 
-      {
-        ...newUser,        
-        _id: DB_Response.insertedId     
-      }                  
+    if(DB_Response.acknowledged){                    
    
       res.writeContinue();
-      return nUser;     
+      return newUser;     
      
     } else {
       res.status(500).send({ error: 'error accured while trying to connect to DB' });
@@ -86,7 +80,6 @@ export const deleteUserById = async (req, res) => {
       _id: req.params.id
     };
     const DB_Response = await client.db(process.env.DB_NAME).collection('users').deleteOne(filter);
-    console.log(DB_Response);
     if(DB_Response.deletedCount){
       res.send({ success: `User with ID ${req.params.id} was deleted successfully.` });
     } else {

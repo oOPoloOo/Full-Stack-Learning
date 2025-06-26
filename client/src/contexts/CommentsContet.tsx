@@ -39,7 +39,6 @@ const CommentProvider = ({ children }: ChildrenElementProp) => {
         console.error(BACK_RESPONSE.error);
         return { error: BACK_RESPONSE.message };
       } else {
-        console.log('CLIENT BACK_RESPONSE', BACK_RESPONSE);
         dispatch({
           type: 'setComment',
           data: BACK_RESPONSE.comments
@@ -52,12 +51,77 @@ const CommentProvider = ({ children }: ChildrenElementProp) => {
     }
   }
 
+  type BackAddCommentResponse = 
+    { error: Error, message: string } |
+    { acknowledged: boolean, commentData: Comment;}
+
+  const addcomment = async (newComment: Omit<Comment, '_id'>): Promise<{ error: string } | { success: string }> => {
+    const accessJWT = localStorage.getItem('accessJWT') || sessionStorage.getItem('accessJWT');
+    try {
+
+      const BACK_RESPONSE: BackAddCommentResponse = await fetch(`http://localhost:5500/comments`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessJWT}`
+        },
+        body: JSON.stringify(newComment)
+      }).then(res => res.json());
+          
+      if("error" in BACK_RESPONSE){
+        console.error(BACK_RESPONSE.error);
+        return { error: BACK_RESPONSE.message };
+      } else {
+        dispatch({
+          type: 'addComment',
+          newComment: BACK_RESPONSE.commentData
+        });
+        return { success: 'Successfully added new comment.' };
+      }
+    } catch(err) {
+      console.error(err);
+      return { error: `Error has occurred` };
+    }
+  };
+
+  const deletecomment = async (commentId: string): Promise<{ error: string } | { success: string }> => {
+    const accessJWT = localStorage.getItem('accessJWT') || sessionStorage.getItem('accessJWT');
+
+  try {
+    const response = await fetch(`http://localhost:5500/comments/${commentId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${accessJWT}`,
+      }      
+    });
+
+    const result = await response.json();
+
+    if (!response.ok || result.error) {
+      return { error: result.message || 'Failed to delete comment.' };
+    }
+
+    dispatch({
+      type: 'removeComment',
+      _id: commentId,
+    });
+
+    return { success: 'Comment deleted successfully.' };
+  } catch (err) {
+    console.error(err);
+    return { error: 'An error occurred while deleting the comment.' };
+  }
+};
+
+
   return (
     <CommentContext.Provider 
       value={{
         comments,
-        fetchPostComments 
-        // addComment
+        fetchPostComments,
+         addcomment,
+         deletecomment
       }}
     >
       { children }

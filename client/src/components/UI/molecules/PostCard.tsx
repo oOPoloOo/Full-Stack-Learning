@@ -57,14 +57,13 @@ const { loggedInUser } = useContext(UserContext) as UserContextTypes;
 
     if (window.confirm("Are you sure you want to delete this post?")) {
      
-
-       const Context_Response =   await deletepost(data._id, loggedInUser.email); 
-          if ('error' in Context_Response) {
-            toast.error(Context_Response.error);
-          } else {
-            toast.success(Context_Response.success || 'Post added successfully.');
-          }
-    }
+      const Context_Response =   await deletepost(data._id, loggedInUser.email); 
+        if ('error' in Context_Response) {
+          toast.error(Context_Response.error);
+        } else {
+          toast.success(Context_Response.success || 'Post added successfully.');
+        }
+      }
   };
 
   return (

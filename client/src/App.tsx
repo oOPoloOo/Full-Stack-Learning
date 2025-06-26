@@ -14,8 +14,8 @@ import type { UserContextTypes } from './types'
 
 function App() {
     const { loggedInUser } = useContext(UserContext) as UserContextTypes;
-    console.log("App.tsx - loggedInUser:", loggedInUser);
-  return (
+ 
+    return (
     <>
       <Routes>
         <Route path="" element={<MainOutlet />}>         

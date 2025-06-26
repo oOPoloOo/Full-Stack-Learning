@@ -1,4 +1,5 @@
 import { connectDB } from "./dbController.js";
+import { v4 as generateID } from 'uuid';
 
 
   export const returnAllComments = async (req, res) => {
@@ -70,16 +71,21 @@ export const returnCommentByPostId = async (req, res) => {
 export const createNewComment = async (req, res) => {
   const client = await connectDB();
   try{
-    const newComment = 
-    {
-      ...req.body     
-    }
+   
+    const newComment = {
+      _id: generateID(),
+      post_id: req.body.post_id,
+      name: req.body.name,
+      text: req.body.text,
+      email: req.body.email,
+      date: req.body.email
+    };
     const DB_Response = await client.db(process.env.DB_NAME).collection('comments').insertOne(newComment);
   
     if(DB_Response.acknowledged){
       res.status(201).send({
-        ...newComment,
-        _id: DB_Response.insertedId
+          success: "Your comment was created",    
+          commentData: newComment       
       });
     } else {
       res.status(500).send({ error: 'error accured while trying to connect to DB' });

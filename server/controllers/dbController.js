@@ -61,11 +61,10 @@ export const isCommentsCreator  = async (req, res, next) => {
   { 
     _id: req.params.id
   };
-    
-  const userEmail =  req.body.email; 
+ 
   const comment = await client.db(process.env.DB_NAME).collection('comments').findOne(filter);
-  
-  if(comment.email !== userEmail) //TODO Check
+
+  if(!comment) //TODO Check
   {
     return res.status(401).send({ error: 'You do not have permission to do this action.' });      
   }  

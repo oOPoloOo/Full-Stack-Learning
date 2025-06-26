@@ -20,52 +20,61 @@ const PostProvider = ({ children }: ChildrenElementProp) => {
 
   const [posts, dispatch] = useReducer(reducer, []);
 
-  const fetchData = () => {
-    fetch(`http://localhost:5500/posts`)
-      .then(res => res.json())
-      .then((data: Post[]) => {
-        dispatch({
-          type: 'setPost',
-          data: data
-        });
-      })
-  }
+   const fetchPosts = async () => {
+    try {
+      const res = await fetch(`http://localhost:5500/posts`);
+      const data: Post[] = await res.json();
+      console.dir("POSTCONTEX fetchPosts post ", data);
 
-  type BackAddPostResponse = 
-  { error: Error, message: string } |
-  { acknowledged: boolean, insertedId: string }
-  const addpost = async (newPost: Omit<Post, '_id'>): Promise<{ error: string } | { success: string }> => {
-    const accessJWT = localStorage.getItem('accessJWT') || sessionStorage.getItem('accessJWT');
+      dispatch({ type: 'setPost', data });
+    } catch (error) {
+      console.error("Failed to fetch posts", error);
+    }
+  };
+
+    useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  
+  type BackAddPostResponse =
+| { error: Error; message: string }
+| {
+    postData: Post; acknowledged: boolean;  
+  };
+
+  const addpost = async (
+    newPost: Omit<Post, "_id">
+  ): Promise<{ error: string } | { success: string; }> => {
+    const accessJWT = localStorage.getItem("accessJWT") || sessionStorage.getItem("accessJWT");
+
     try {
       const BACK_RESPONSE: BackAddPostResponse = await fetch(`http://localhost:5500/posts`, {
         method: "POST",
         headers: {
-          "Content-Type":"application/json",
-          Authorization: `Bearer ${accessJWT}`
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${accessJWT}`,
         },
-        body: JSON.stringify(newPost)
-      }).then(res => res.json())
-      if("error" in BACK_RESPONSE){
+        body: JSON.stringify(newPost),
+      }).then((res) => res.json());
+
+      if ("error" in BACK_RESPONSE) {
         console.error(BACK_RESPONSE.error);
         return { error: BACK_RESPONSE.message };
       } else {
-        dispatch({
-          type: 'addPost',
-          newPost: {
-            ...newPost,
-            _id: BACK_RESPONSE.insertedId
-          }
-        });
-        return { success: 'Successfully added new post.' };
+       
+        dispatch({ type: "addPost", newPost:  BACK_RESPONSE.postData});
+        return { success: "Successfully added new post." };
       }
-    } catch(err) {
+    } catch (err) {
       console.error(err);
-      return { error: `Error has accured` };
+      return { error: `Error has occurred` };
     }
-  }
+  };
 
   const deletepost = async (postId: string, userEmail: String): Promise<{ error: string } | { success: string }> => {
-  const accessJWT = localStorage.getItem('accessJWT') || sessionStorage.getItem('accessJWT');
+  
+    const accessJWT = localStorage.getItem('accessJWT') || sessionStorage.getItem('accessJWT');
   try {
     const response = await fetch(`http://localhost:5500/posts/${postId}`, {
       method: "DELETE",
@@ -75,13 +84,11 @@ const PostProvider = ({ children }: ChildrenElementProp) => {
       },
       body: JSON.stringify({ email: userEmail }),
     });
-    console.log("CLIENTR deletepost userEmail ", userEmail);
     const result = await response.json();
 
     if (!response.ok || result.error) {
       return { error: result.message || 'Failed to delete post.' };
     }
-
     
     dispatch({
       type: 'removePost',
@@ -95,16 +102,13 @@ const PostProvider = ({ children }: ChildrenElementProp) => {
   }
 };
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   return (
     <PostContext.Provider 
       value={{
         posts,
         addpost,
-        deletepost
+        deletepost,
+        fetchPosts
       }}
     >
       { children }
