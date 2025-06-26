@@ -72,7 +72,7 @@ export const deleteSessionById = async (req, res) => {
       _id: req.params.id
     };
     const DB_Response = await client.db(process.env.DB_NAME).collection('sessions').deleteOne(filter);
-    console.log(DB_Response);
+   
     if(DB_Response.deletedCount){
       res.send({ success: `Session with ID ${req.params.id} was deleted successfully.` });
     } else {
