@@ -52,7 +52,7 @@ export const createAccessJWT = (newUser) => {
 
 export const createRefreshJWT = (newUser) => {
   return jwt.sign(newUser, process.env.REFRESH_JWT, {
-    expiresIn: '30m'
+    expiresIn: '40m'
   });
 }
 

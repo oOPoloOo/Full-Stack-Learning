@@ -53,7 +53,8 @@ const UserProvider = ({ children }: ChildrenProp) => {
            dispatch({
           type: 'setUser',
           user: BACK_RESPONSE.userData
-        });
+        });        
+
         return { success: BACK_RESPONSE.success };
       } else {
         return { error: BACK_RESPONSE.error };
@@ -124,10 +125,8 @@ const UserProvider = ({ children }: ChildrenProp) => {
         .then(res => res.json())
         .then(data => {
           if('error' in data){
-            // modal about error
             console.log(data.error);
             localStorage.removeItem('accessJWT');
-            // navigate to login after few seconds
             navigate('/login');
           } 
           else 
@@ -155,48 +154,6 @@ const UserProvider = ({ children }: ChildrenProp) => {
     </UserContext.Provider>
   );
 }
-
-
-
-
-// const reducer = (state: User[], action: UsersReducerActionTypes): User[] => {  
-// };
-
-// const UsersContext = createContext<UsersContextTypes | undefined>(undefined);
-
-//  const UsersProvider = ({ children }: ChildrenProp) => {
-
-    // TODO: Implement the reducer function
-//   const [users, dispatch] = useReducer(reducer, []);
-//   const [loggedInUser, setLoggedInUser] = useState<User | null>(() => {  });
-
-// useEffect(() => {
-//     fetch(`http://localhost:8080/users`)
-//       .then(res => res.json())
-//       .then(data => dispatch({
-//         type: 'setUsers',
-//         data: data
-//       }))
-//   }, []);
-
-
-
-
-
-//   return (
-//     <UsersContext.Provider
-//       value={{
-//         loggedInUser,
-//         setLoggedInUser,
-//         users,
-//         dispatch,
-//       }}
-//     >
-//       {children}
-//     </UsersContext.Provider>
-//   );
-//   return ( null );
-// };
 
 export { UserProvider };
 export default UserContext;

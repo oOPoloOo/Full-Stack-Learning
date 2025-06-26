@@ -31,19 +31,18 @@ export const login = async (req, res) => {
 }
 
 export const register = async (req, res) => 
-{
-    
+{ 
   const userExists= await checkUser( req.body.email, req.body.password );
   if(userExists)
   {
     return res.status(405).send({ error: "User with such email already exists." });
-  }
+  } 
+
 
   const newUser = await createNewUser(req, res); 
 
   const { password, ...userInfoNoPass } = newUser;
 
-  // sukuriame jsonWebToken
   const accessToken = createAccessJWT(userInfoNoPass);  
   const refreshToken = createRefreshJWT(userInfoNoPass);
   

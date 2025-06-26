@@ -11,13 +11,13 @@ import { CommentProvider } from './contexts/CommentsContet.tsx';
 
 createRoot(document.getElementById('root') as HTMLDivElement).render(
   <BrowserRouter>  
-    <PostProvider>
-      <CommentProvider>
-        <UserProvider>
-          <App />    
-        </UserProvider>
-      </CommentProvider> 
-    </PostProvider>
+    <UserProvider>
+      <PostProvider>
+        <CommentProvider>
+            <App />    
+        </CommentProvider> 
+      </PostProvider>
+    </UserProvider>
   </BrowserRouter>
 );
 
