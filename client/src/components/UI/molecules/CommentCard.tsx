@@ -9,33 +9,28 @@ type Props = {
   data: Comment
 }
 
-// const StyledCard = styled.div`
-//   background: #1a252f;
-//   padding: 15px;
-//   margin-top: 20px;
-//   border-radius: 8px;
-//   width: 350px;
-//   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
-// `;
-
-// const CommentCard = ({ data }: Props) => {
-//   return (
-//     <StyledCard>
-//     <h3>{data.name}</h3>
-//     <p>${data.text}</p>   
-//     </StyledCard>
-//   );
-// }
-
 const StyledCard = styled.div`
   position: relative;
   background: #1a252f;
   padding: 15px;
   margin-top: 20px;
   border-radius: 8px;
-  width: 350px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  width: 60%;
+  max-width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  align-self: flex-start;
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
 `;
+
 
 const DeleteButton = styled.button`
   position: absolute;
@@ -53,6 +48,12 @@ const DeleteButton = styled.button`
   &:hover {
     background-color: #6d2471;
   }
+`;
+
+const StyledText = styled.p`
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
 `;
 
 const CommentCard = ({ data }: Props) => {
@@ -90,7 +91,7 @@ const CommentCard = ({ data }: Props) => {
           <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
         )}
         <h3>{data.name}</h3>
-        <p>{data.text}</p>
+        <StyledText>{data.text}</StyledText>
       </StyledCard>
     </>
   );

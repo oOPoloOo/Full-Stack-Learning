@@ -19,7 +19,7 @@ const StyledCard = styled.div`
   margin-top: 20px;
   border-radius: 8px;
   width: 350px;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);  
 `;
 
 const DeleteButton = styled.button`
@@ -40,6 +40,23 @@ const DeleteButton = styled.button`
   }
 `;
 
+const StyledText = styled.p`
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  margin-top: 10px;
+  color: #dcccfe;
+  line-height: 1.4;
+`;
+
+const StyledTitle = styled.h3`
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal;
+  color: #dcccfe;
+  font-size: 18px;
+  margin-bottom: 8px;
+`;
 
 const PostCard = ({ data }: Props) => {
 const { loggedInUser } = useContext(UserContext) as UserContextTypes;
@@ -73,8 +90,8 @@ const { loggedInUser } = useContext(UserContext) as UserContextTypes;
         {canDelete && (
           <DeleteButton onClick={handleDelete}>Delete</DeleteButton>
         )}
-        <h3>{data.name}</h3>
-        <p>{data.text}</p>
+        <StyledTitle>{data.name}</StyledTitle>
+        <StyledText>{data.text}</StyledText>
       </StyledCard>
     </Link>
   );
