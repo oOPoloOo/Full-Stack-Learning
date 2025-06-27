@@ -219,7 +219,7 @@ const PostDetailsPage = () => {
   const handleSubmitComment = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!commentText.trim()) return;
-    if (!loggedInUser?._id  || !loggedInUser?.email || !post?._id ) { // TODO THIS !post?._id  === undefined
+    if (!loggedInUser?._id  || !loggedInUser?.email || !post?._id ) { 
       toast.error("User or post information is missing.");
       return;
     }
