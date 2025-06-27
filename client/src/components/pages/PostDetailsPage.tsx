@@ -40,7 +40,12 @@ const Content = styled.div<CollapsibleProps>`
   padding: 20px;
   transition: margin-left 0.3s ease;
   position: relative;
+
+  @media (max-width: 768px) {
+    padding: 10px; // smaller padding for small screens
+  }
 `;
+
 
 const HamburgerButton = styled.button`
   position: absolute;
@@ -62,9 +67,12 @@ const HamburgerButton = styled.button`
 
 const StyledCommentsContainer = styled.div`
   display: flex;
-  gap: 20px;
-  justify-content: space-between;
-  flex-wrap: wrap;
+  flex-direction: column;  
+  align-items: flex-start; 
+  gap: 20px;               
+  margin-top: 30px;       
+   width: 100%;              // ensures it fills the Content area
+  box-sizing: border-box;   // avoids overflow due to padding 
 `;
 
 const StyledPostCard = styled.div`
@@ -73,7 +81,31 @@ const StyledPostCard = styled.div`
   margin-top: 20px;
   border-radius: 8px;
   width: 100%;
-  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  max-width: 100%;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  box-sizing: border-box;
+  overflow-wrap: anywhere;
+  white-space: normal;
+
+  @media (max-width: 768px) {
+    padding: 12px;
+    font-size: 14px;
+  }
+`;
+
+const PostWrapper = styled.div`
+  width: 100%;
+  max-width: 1200px;
+  padding: 0 16px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+
+  @media (max-width: 768px) {
+    padding: 0 8px;
+  }
 `;
 
 const AddCommentButton = styled.button`
@@ -228,39 +260,40 @@ const PostDetailsPage = () => {
           <FaBars />
         </HamburgerButton>
 
-        <StyledPostCard>
-          {post ? (
-            <>
-              <h1>{post.name}</h1>
-              <p>{post.text}</p>
-            </>
-          ) : (
-            <p>Loading post...</p>
-          )}
+        <PostWrapper>
+          <StyledPostCard>
+              {post ? (
+                <>
+                  <h1>{post.name}</h1>
+                  <p>{post.text}</p>
+                </>
+              ) : (
+                <p>Loading post...</p>
+              )}
 
-          {loggedInUser && (
-            <AddCommentButton onClick={() => setShowModal(true)}>
-              <FaPlus /> Add Comment!
-            </AddCommentButton>
-          )}
-        </StyledPostCard>
+              {loggedInUser && (
+                <AddCommentButton onClick={() => setShowModal(true)}>
+                  <FaPlus /> Add Comment!
+                </AddCommentButton>
+              )}
+          </StyledPostCard>
 
-       {showModal && (
-          <ModalOverlay>
-            <ModalContent>
-              <h3>Add your comment</h3>
-              <StyledTextarea
-                rows={4}
-                value={commentText}
-                onChange={(e) => setCommentText(e.target.value)}
-              />
-              <ModalButtons>
-                <ModalButton onClick={() => setShowModal(false)}>Cancel</ModalButton>
-                <ModalButton onClick={handleSubmitComment}>Submit</ModalButton>
-              </ModalButtons>
-            </ModalContent>
-          </ModalOverlay>
-        )}
+          {showModal && (
+              <ModalOverlay>
+                <ModalContent>
+                  <h3>Add your comment</h3>
+                  <StyledTextarea
+                    rows={4}
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                  />
+                  <ModalButtons>
+                    <ModalButton onClick={() => setShowModal(false)}>Cancel</ModalButton>
+                    <ModalButton onClick={handleSubmitComment}>Submit</ModalButton>
+                  </ModalButtons>
+                </ModalContent>
+              </ModalOverlay>
+            )}
 
           <StyledCommentsContainer>
             {loadingComments ? (
@@ -273,6 +306,8 @@ const PostDetailsPage = () => {
               <p>No comments yet.</p>
             )}
           </StyledCommentsContainer>
+        </PostWrapper>
+       
       </Content>
     </Container>
   );

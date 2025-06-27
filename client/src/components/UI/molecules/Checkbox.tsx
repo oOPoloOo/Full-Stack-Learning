@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const CheckboxWrapper = styled.div`
-  /* display: flex;
-  align-items: center;
-  gap: 10px; */
-
     display: flex;
     align-items: center;
     font-size: 12px;

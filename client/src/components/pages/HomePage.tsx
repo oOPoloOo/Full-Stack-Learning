@@ -16,11 +16,13 @@ interface CollapsibleProps {
 
 const Container = styled.div`
   display: flex;
-  
+  flex-grow: 1;
   overflow: hidden;
 `;
 
-const Sidebar = styled.div<CollapsibleProps>`
+const Sidebar = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "collapsed",
+})<CollapsibleProps>`
   width: ${({ collapsed }) => (collapsed ? SIDEBAR_COLLAPSED_WIDTH : SIDEBAR_WIDTH)}px;
   background: #151c22;
   color: white;
@@ -32,8 +34,12 @@ const Sidebar = styled.div<CollapsibleProps>`
   align-items: ${({ collapsed }) => (collapsed ? "center" : "flex-start")};
 `;
 
-const Content = styled.div<CollapsibleProps>`
+const Content = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "collapsed",
+})<CollapsibleProps>`
   flex-grow: 1;
+   display: flex; //
+  flex-direction: column; // organaze content vertically
   background: linear-gradient(180deg, #0f2027, #203a43, #2c5364);
   color: white;
   padding: 20px;
